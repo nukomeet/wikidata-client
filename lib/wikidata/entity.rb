@@ -7,18 +7,17 @@ module Wikidata
 
     def initialize(hash)
       @hash = Hashie::Mash.new hash
-      @_properties = {}
+      @properties = {}
     end
 
     def id
-      return hash['id'] if hash['id']
-      return hash['title'] if hash['title']
+      hash['id'] || hash['title']
     end
 
     def title
       return labels['en'].value if labels && labels['en']
       return sitelinks['en'].value if sitelinks && sitelinks['en']
-      hash['title'] if hash['title']
+      hash['title']
     end
 
     def url
@@ -27,18 +26,18 @@ module Wikidata
 
     Wikidata.mapping.each do |type, mappings|
       resource = (type.to_sym == :resources)
-      mappings.each do |k, code|
-        define_method k do
+      mappings.each do |key, code|
+        define_method key do
           resource ? property(code) : properties(code)
         end
-        define_method (resource ? "#{k}_id" : "#{k}_ids") do
+        define_method(resource ? "#{key}_id" : "#{key}_ids") do
           resource ? property_id(code) : property_ids(code)
         end
       end
     end
 
     def properties(code)
-      @_properties[code] ||= Array(raw_property(code)).map { |a| Wikidata::Property.build a }
+      @properties[code] ||= [*raw_property(code)].map { |a| Wikidata::Property.build a }
     end
 
     def property_ids(code)

@@ -18,7 +18,7 @@ module Wikidata
       when 'monolingualtext'
         Wikidata::Property::MonolingualText.new attribute
       else
-        puts "Unkown property type #{attribute.mainsnak.datatype}"
+        raise "Unkown property type #{attribute.mainsnak.datatype}"
       end
     end
   end

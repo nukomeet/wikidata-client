@@ -307,19 +307,6 @@ describe Wikidata::Property::Time do
     )
   end
 
-  describe 'leap year' do
-    [1972, 1976, 1980, 1984, 1988, 1992, 1996, 2000, 2004, 2008, 2012, 2016].each do |y|
-      it "should be true for #{y}" do
-        described_class.leap_year?(y).should eq true
-      end
-    end
-    [1974, 1978, 2014].each do |y|
-      it "should be false for #{y}" do
-        described_class.leap_year?(y).should eq false
-      end
-    end
-  end
-
   it 'should return a range of DateTime' do
     range_of_year.tap do |date|
       date.should be_kind_of Wikidata::Property::Time

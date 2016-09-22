@@ -6,35 +6,39 @@ module Wikidata
       THUMB_IMAGE_URL = 'https://upload.wikimedia.org/wikipedia/commons/thumb/%s/%s/%s.%s/%ipx-%s.%s'.freeze
 
       def page_url
-        @_page_url ||= sprintf BASE_PAGE_URL, basename, extension
+        @page_url ||= format BASE_PAGE_URL, basename, extension
       end
 
       def url(size = nil)
-        if size
-          sprintf THUMB_IMAGE_URL, md5[0], md5[0..1], basename, extension, size, basename, extension, thumb_extension
-        else
-          sprintf IMAGE_URL, md5[0], md5[0..1], basename, extension
-        end
+        format(size ? THUMB_IMAGE_URL : IMAGE_URL,
+               md5[0],
+               md5[0..1],
+               basename,
+               extension,
+               size,
+               basename,
+               extension,
+               thumb_extension)
       end
 
       def md5
-        @_md5 ||= Digest::MD5.hexdigest "#{basename}.#{extension}"
+        @md5 ||= Digest::MD5.hexdigest([basename, extension].join('.'))
       end
 
       def basename
-        @_basename ||= name.tr ' ', '_'
+        @basename ||= name.tr(' ', '_')
       end
 
       def name
-        @_name ||= File.basename(value, ".#{extension}")
+        @name ||= File.basename(value, ".#{extension}")
       end
 
       def thumb_extension
-        @_thumb_ext ||= extension == 'svg' ? 'svg.png' : extension
+        @thumb_ext ||= extension == 'svg' ? 'svg.png' : extension
       end
 
       def extension
-        @_ext ||= File.extname(value).tr '.', ''
+        @ext ||= File.extname(value).tr('.', '')
       end
     end
   end

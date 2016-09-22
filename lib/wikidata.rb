@@ -8,7 +8,7 @@ require 'wikidata/config'
 module Wikidata
   class << self
     def configure(&block)
-      Config.configure &block
+      Config.configure(&block)
     end
 
     def faraday
