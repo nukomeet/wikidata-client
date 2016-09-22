@@ -4,13 +4,13 @@ module Wikidata
 
     def_delegators :results, :size
 
-    def initialize raw
+    def initialize(raw)
       @raw = raw
     end
 
     def results
       return [] if empty?
-      @_results ||= raw_results.map{|r| Wikidata::Item.new(r) }
+      @_results ||= raw_results.map { |r| Wikidata::Item.new(r) }
     end
 
     def empty?
@@ -29,7 +29,7 @@ module Wikidata
 
     def raw_results
       return [] if empty?
-      @raw.body['entities'].values.reject{|r| r['missing'] }
+      @raw.body['entities'].values.reject { |r| r['missing'] }
     end
   end
 end

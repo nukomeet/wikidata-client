@@ -1,6 +1,5 @@
 module Wikidata
   class SearchResponse < Response
-
     def results
       return [] if empty?
       @_results ||= Wikidata::Item.find(raw_ids).results
@@ -24,7 +23,7 @@ module Wikidata
 
     def raw_ids
       return if empty?
-      @raw.body['query']['search'].map{|r| r['title'] }
+      @raw.body['query']['search'].map { |r| r['title'] }
     end
 
     def raw_results

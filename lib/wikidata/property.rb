@@ -1,7 +1,7 @@
 module Wikidata
   module Property
-    def self.build attribute
-      return if %w{somevalue novalue}.include? attribute.mainsnak.snaktype
+    def self.build(attribute)
+      return if %w(somevalue novalue).include? attribute.mainsnak.snaktype
       case attribute.mainsnak.datatype
       when 'string', 'external-id'
         Wikidata::Property::String.new attribute

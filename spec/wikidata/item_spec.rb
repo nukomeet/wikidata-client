@@ -1,11 +1,10 @@
 require 'spec_helper'
 
 describe Wikidata::Item, :vcr do
-
   describe '#find:' do
     let(:entity_by_id) { Wikidata::Item.find 'Q2831' }
     let(:entity_by_title) { Wikidata::Item.find_by_title 'Michael Jackson' }
-    let(:collection_by_id) { Wikidata::Item.find ['Q2831', 'Q47878'] }
+    let(:collection_by_id) { Wikidata::Item.find %w(Q2831 Q47878) }
     let(:collection_by_title) { Wikidata::Item.find_by_title ['Michael Jackson', 'Sid Vicious'] }
 
     it 'should return nil if item not found' do
@@ -27,13 +26,13 @@ describe Wikidata::Item, :vcr do
     it 'should find by ids' do
       collection_by_id.size.should eq 2
       collection_by_id.should be_kind_of Wikidata::Response
-      collection_by_id.results.each{|i| i.should be_kind_of Wikidata::Item }
+      collection_by_id.results.each { |i| i.should be_kind_of Wikidata::Item }
     end
 
     it 'should find by titles' do
       collection_by_title.size.should eq 2
       collection_by_title.should be_kind_of Wikidata::Response
-      collection_by_title.results.each{|i| i.should be_kind_of Wikidata::Item }
+      collection_by_title.results.each { |i| i.should be_kind_of Wikidata::Item }
     end
   end
 
@@ -50,7 +49,7 @@ describe Wikidata::Item, :vcr do
     it 'should return an array of Wikidata::Item' do
       search.size.should eq 10
       search.should be_kind_of Wikidata::SearchResponse
-      search.results.each{|i| i.should be_kind_of Wikidata::Item }
+      search.results.each { |i| i.should be_kind_of Wikidata::Item }
     end
 
     it 'should return the total number of hits' do

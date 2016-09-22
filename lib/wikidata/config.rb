@@ -3,7 +3,7 @@ module Wikidata
     class << self
       attr_accessor :options, :faraday, :settings, :mapping
 
-      def configure &block
+      def configure
         yield self
       end
     end

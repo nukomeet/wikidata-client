@@ -7,7 +7,6 @@ describe Wikidata::Entity, :vcr do
   let(:github) { Wikidata::Item.find_by_title 'GitHub' }
 
   describe 'properties' do
-
     it 'should return id' do
       sid.id.should eq 'Q47878'
     end
@@ -31,38 +30,36 @@ describe Wikidata::Entity, :vcr do
     end
 
     it 'should return sitelinks' do
-      sid.sitelinks.frwiki.should eq({"site"=>"frwiki", "title"=>"Sid Vicious", "badges"=>[]})
+      sid.sitelinks.frwiki.should eq('site' => 'frwiki', 'title' => 'Sid Vicious', 'badges' => [])
     end
 
     describe 'entities' do
-
       it 'should return entities property from an id (P40 for children here)' do
         homer.properties('P40').tap do |children|
           children.size.should eq 3
-          children.each{|c| c.should be_kind_of Wikidata::Item }
-          children.map{|c| c.labels['en']['value'] }.should eq ['Bart Simpson', 'Lisa Simpson', 'Maggie Simpson']
+          children.each { |c| c.should be_kind_of Wikidata::Item }
+          children.map { |c| c.labels['en']['value'] }.should eq ['Bart Simpson', 'Lisa Simpson', 'Maggie Simpson']
         end
       end
 
       it 'should return entities property from a key (children here)' do
         homer.children.tap do |children|
           children.size.should eq 3
-          children.each{|c| c.should be_kind_of Wikidata::Item }
-          children.map{|c| c.labels['en']['value'] }.should eq ['Bart Simpson', 'Lisa Simpson', 'Maggie Simpson']
+          children.each { |c| c.should be_kind_of Wikidata::Item }
+          children.map { |c| c.labels['en']['value'] }.should eq ['Bart Simpson', 'Lisa Simpson', 'Maggie Simpson']
         end
       end
 
       it 'should allow to return only entities ids from an id' do
-        homer.property_ids('P40').should eq ["Q5480", "Q5846", "Q7834"]
+        homer.property_ids('P40').should eq %w(Q5480 Q5846 Q7834)
       end
 
       it 'should allow to return only entities ids from a key' do
-        homer.children_ids.should eq ["Q5480", "Q5846", "Q7834"]
+        homer.children_ids.should eq %w(Q5480 Q5846 Q7834)
       end
     end
 
     describe 'properties' do
-
       context 'of type date' do
         it 'should return Time from a property id (P569 for date of birth here)' do
           homer.property('P569').tap do |date|

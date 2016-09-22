@@ -2,11 +2,11 @@ module Wikidata
   class Client
     DEFAULT_QUERY = {
       format: 'json'
-    }
+    }.freeze
 
     attr_accessor :query, :total_pages
 
-    def initialize query = {}
+    def initialize(query = {})
       @query = DEFAULT_QUERY.merge(query)
     end
 

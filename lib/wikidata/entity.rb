@@ -5,7 +5,7 @@ module Wikidata
     attr_accessor :hash
     def_delegators :@hash, :id, :labels, :aliases, :descriptions, :sitelinks
 
-    def initialize hash
+    def initialize(hash)
       @hash = Hashie::Mash.new hash
       @_properties = {}
     end
@@ -37,21 +37,21 @@ module Wikidata
       end
     end
 
-    def properties code
-      @_properties[code] ||= Array(raw_property(code)).map {|a| Wikidata::Property.build a }
+    def properties(code)
+      @_properties[code] ||= Array(raw_property(code)).map { |a| Wikidata::Property.build a }
     end
 
-    def property_ids code
+    def property_ids(code)
       Array(raw_property(code)).map do |attribute|
         self.class.entity_id attribute
       end.compact
     end
 
-    def property code
+    def property(code)
       properties(code).first
     end
 
-    def property_id code
+    def property_id(code)
       property_ids(code).first
     end
 
@@ -60,17 +60,16 @@ module Wikidata
     end
 
     class << self
-
-      # TODO Handle other types
+      # TODO: Handle other types
       # http://www.wikidata.org/wiki/Wikidata:Glossary#Entities.2C_items.2C_properties_and_queries
-      def entity_id attribute
+      def entity_id(attribute)
         return unless attribute.mainsnak.datavalue
         attribute.mainsnak.datavalue.value.tap do |h|
           case h['entity-type']
-            when 'item'
-              return "Q#{h['numeric-id']}"
-            else
-              return nil
+          when 'item'
+            return "Q#{h['numeric-id']}"
+          else
+            return nil
           end
         end
       end
@@ -78,7 +77,7 @@ module Wikidata
 
     private
 
-    def raw_property code
+    def raw_property(code)
       return unless hash.claims
       hash.claims[code]
     end

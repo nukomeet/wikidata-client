@@ -1,12 +1,12 @@
 require 'spec_helper'
 
 describe Wikidata do
-  let(:options) {
+  let(:options) do
     { request: { timeout: 10 } }
-  }
-  let(:builder) {
+  end
+  let(:builder) do
     -> (builder) { builder.use :excon }
-  }
+  end
   it 'should be configurable' do
     Wikidata.configure do |c|
       c.options = options

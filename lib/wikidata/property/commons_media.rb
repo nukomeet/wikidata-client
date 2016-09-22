@@ -1,15 +1,15 @@
 module Wikidata
   module Property
     class CommonsMedia < Wikidata::Property::Base
-      BASE_PAGE_URL = "https://commons.wikimedia.org/wiki/File:%s.%s".freeze
-      IMAGE_URL = "https://upload.wikimedia.org/wikipedia/commons/%s/%s/%s.%s"
-      THUMB_IMAGE_URL = "https://upload.wikimedia.org/wikipedia/commons/thumb/%s/%s/%s.%s/%ipx-%s.%s"
+      BASE_PAGE_URL = 'https://commons.wikimedia.org/wiki/File:%s.%s'.freeze
+      IMAGE_URL = 'https://upload.wikimedia.org/wikipedia/commons/%s/%s/%s.%s'.freeze
+      THUMB_IMAGE_URL = 'https://upload.wikimedia.org/wikipedia/commons/thumb/%s/%s/%s.%s/%ipx-%s.%s'.freeze
 
       def page_url
         @_page_url ||= sprintf BASE_PAGE_URL, basename, extension
       end
 
-      def url size = nil
+      def url(size = nil)
         if size
           sprintf THUMB_IMAGE_URL, md5[0], md5[0..1], basename, extension, size, basename, extension, thumb_extension
         else
@@ -22,7 +22,7 @@ module Wikidata
       end
 
       def basename
-        @_basename ||= name.gsub ' ', '_'
+        @_basename ||= name.tr ' ', '_'
       end
 
       def name

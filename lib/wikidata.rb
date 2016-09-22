@@ -7,7 +7,7 @@ require 'wikidata/config'
 
 module Wikidata
   class << self
-    def configure &block
+    def configure(&block)
       Config.configure &block
     end
 

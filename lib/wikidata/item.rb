@@ -14,26 +14,26 @@ module Wikidata
     }.freeze
 
     class << self
-      def find ids, query = {}
+      def find(ids, query = {})
         _find :ids, ids, query
       end
 
-      def find_by_title titles, query = {}
+      def find_by_title(titles, query = {})
         _find :titles, titles, query
       end
 
-      def _find finder = :ids, list = '', query = {}
+      def _find(finder = :ids, list = '', query = {})
         q = DEFAULT_QUERIES[:find]
-              .merge( query )
-              .merge( finder => Array(list).join('|') )
-        Wikidata::Client.new( q ).response.tap do |resp|
+            .merge(query)
+            .merge(finder => Array(list).join('|'))
+        Wikidata::Client.new(q).response.tap do |resp|
           return resp.results.first unless list.is_a?(Array)
         end
       end
 
-      def search search, query = {}
-        q = DEFAULT_QUERIES[:search].merge( srsearch: search ).merge(query)
-        Wikidata::Client.new( q ).response
+      def search(search, query = {})
+        q = DEFAULT_QUERIES[:search].merge(srsearch: search).merge(query)
+        Wikidata::Client.new(q).response
       end
     end
   end
