@@ -36,7 +36,14 @@ module Wikidata
       ].freeze
 
       def date
-        @date ||= DateTime.iso8601(value.time)
+        return @date if @date
+        d = Hash[[:year, :month, :day, :hour, :min, :sec].zip(
+          value.time.scan(/(-?\d+)-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/).first.map(&:to_i)
+        )]
+        [:month, :day].each do |k|
+          d[k] = ((d[k]).zero? ? 1 : d[k])
+        end
+        @date ||= DateTime.new(*d.values)
       end
 
       def timestamp
